@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+          document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.fixed-action-btn');
+    var instances = M.FloatingActionButton.init(elems, options);
+  });
+    </script>
+</head>
+
+<body style="background-color: #FFFFFF;">
+
+    <div style="height: 45px;"></div>
+
+    <div class="nav row" >
+
+        <div class="col xl3 l2 s1"></div>
+
+        <div class="col xl6 l8 s10">
+            <div class="row center-align" style="display: flex; align-items: center; justify-content: center; height: 70px; margin-bottom: 25px;">
+                <a href="https://preciousforyou.ru/" style="display: inline; margin-right: 15px;" target="_blank" rel="noopener">
+                    <img style="max-width: 70px; max-height: 100%;" src="static/precious_logo.png" alt="логотип">
+                </a>
+                <h5 style="margin: 0 15px;">бренд</h5>
+                <h5 style="margin: 0 15px;">коллекция</h5>
+                <h5 style="margin: 0 15px;">покупка</h5>
+            </div>
+        </div>
+
+        <div class="col xl3 l2 s1"></div>
+
+    </div>
+
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large" style="background-color: #8b0000;">
+          <i class="large material-icons">shopping_cart</i>
+        </a>
+        <ul>
+          <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
+          <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
+          <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
+          <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
+        </ul>
+      </div>
+
+
+    <div class="video-background" style="height: 85%;">
+        <!-- Вставка YouTube-видео -->
+        <div class="video-background">
+            <video autoplay muted loop>
+                <source src="static/versace-cut.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="content">
+                <h1>Precious for you</h1>
+                <p>Klassnoe video na fone</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-block">
+        <div class="row">
+
+            <div class="col m12 l8">
+                <div class="container">
+                    <h2>Кто мы такие?</h2>
+                    <div>
+                        <p>Я не знаю, кто вы такие, почему я вообще общаюсь с монитором? Что врешит судьбу человечства?</p>
+                        <p>Не, а по серьёзке, кто вы такие? БЛЯЯЯЯЯЯЯЯЯДь ВЫПУСТИТЕ МЕНЯ НАХУЙ</p>
+                        <p>АААААААААААААААААААААААА</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col l4 hide-on-med-and-down" style="padding: 0%;">
+                <div class="about-photo-wrapper">
+                    <img class="about-photo" src="static/ph5.png">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="main container" style="min-height: 100vh;">
+        <div class="row">
+
+            <div class="col s12 m6 l4 xl3">
+                <div class="product_wrapper">
+                    <img class=" product_image" src="static/ph2.png">
+                    <p class="product_name">Футболка precious</p>
+                    <p class="product_price">2 800₽</p>
+                    <p class="product_desc truncate">только два размера (true oversize)</p>
+                    <div class="buy_button center-align">в корзину</div>
+                </div>
+            </div>
+
+            {% for product in products %}
+            <div class="col s12 m6 l4 xl3">
+                <div class="product_wrapper">
+                    <img class="product_image" src="{{ product.images[0] }}" alt="{{ product.name }}">
+                    <p class="product_name">{{ product.name }}</p>
+                    <p class="product_desc">{{ product.description }}</p>
+                    <p class="product_price">Price: {{ product.price }} ₽</p>
+                    <p class="product_size">Available Sizes: {{ product.sizes | join(', ') }}</p>
+                    <p class="product_colors">Colors: {{ product.colors | join(', ') }}</p>
+                    <div class="buy_button center-align">Add to Cart</div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <footer class="page-footer" style="background-color: black;">
+        <div class="container">
+          <div class="row">
+            <div class="col l6 s12 m6 l4">
+              <h5 class="white-text">Текстик</h5>
+              <p class="white-text text-lighten-4">Я хуй знает, брат, что здесь написать</p>
+            </div>
+            <div class="col l4 offset-l2 s12 m6 l4">
+              <h5 class="white-text">Ещё всякая хуйня и ссылочки</h5>
+              <ul>
+                <li><a class="grey-text text-lighten-3" href="#!">Сслка 1</a></li>
+                <li><a class="grey-text text-lighten-3" href="#!">Сслка 2</a></li>
+                <li><a class="grey-text text-lighten-3" href="#!">Сслка 3</a></li>
+                <li><a class="grey-text text-lighten-3" href="#!">Сслка 4</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="footer-copyright" style="background-color: #151515;">
+          <div class="container">
+          © 2025 preciousforyou.ru
+          </div>
+        </div>
+      </footer>
+</body>

@@ -3,6 +3,7 @@
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
@@ -10,11 +11,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script>
-          document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.fixed-action-btn');
-    var instances = M.FloatingActionButton.init(elems, options);
-  });
+            document.addEventListener('DOMContentLoaded', function() {
+                var elems = document.querySelectorAll('.fixed-action-btn');
+                var instances = M.FloatingActionButton.init(elems, {direction: "left"});
+            });
     </script>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 </head>
 
 <body style="background-color: #FFFFFF;">
@@ -41,16 +44,95 @@
     </div>
 
     <div class="fixed-action-btn">
-        <a class="btn-floating btn-large" style="background-color: #8b0000;">
-          <i class="large material-icons">shopping_cart</i>
+        <a class="btn-floating btn-large red" id="cart-button">
+            <i class="large material-icons">shopping_cart</i>
         </a>
-        <ul>
-          <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
-          <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
-          <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
-          <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
+        <ul id="cart-items" 
+            style="display: none; 
+                   position: absolute; 
+                   bottom: 500px; 
+                   right: 70px; 
+                   background: white; 
+                   z-index: 1000; 
+                   padding: 10px; 
+                   border-radius: 5px; 
+                   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); 
+                   width: 300px; 
+                   overflow-y: auto; 
+                   max-height: 300px;
+                   min-height: 300px;">
+            <!-- Динамически добавляемые товары -->
         </ul>
-      </div>
+    </div>
+    
+    <script>
+        // Показать/скрыть содержимое корзины при наведении
+        const cartButton = document.getElementById('cart-button');
+        const cartItems = document.getElementById('cart-items');
+    
+        // Показать корзину при наведении на значок
+        cartButton.addEventListener('mouseenter', () => {
+            cartItems.style.display = 'block';
+        });
+    
+        // Скрыть корзину при выходе курсора
+        cartItems.addEventListener('mouseleave', () => {
+            cartItems.style.display = 'none';
+        });
+    
+        // Оставить корзину открытой, если курсор над элементами
+        cartItems.addEventListener('mouseenter', () => {
+            cartItems.style.display = 'block';
+        });
+    
+        // Функция загрузки корзины
+        function loadCart() {
+            fetch('/cart')
+                .then(response => response.json())
+                .then(data => {
+                    cartItems.innerHTML = ''; // Очистить старые элементы
+                    
+                    data.forEach((item, index) => {
+                        const li = document.createElement('li');
+                        li.classList.add('collection-item');
+                        li.innerHTML = `
+                            <div class="row" style="display: flex; align-items: center;">
+                                <div style="flex: 0 0 auto; margin-right: 10px;">
+                                    <a onclick="removeFromCart(${index})">
+                                        <i class="material-icons" style="color: red; cursor: pointer;">close</i>
+                                    </a>
+                                </div>
+                                <div style="flex: 1;">
+                                    <p style="margin: 0;">${item.product.name} (${item.size || 'No size'}, ${item.color || 'No color'})</p>
+                                </div>
+                            </div>`;
+                        cartItems.appendChild(li);
+                    });
+    
+                    if (data.length === 0) {
+                        cartItems.innerHTML = '<li class="collection-item">Пока пусто(</li>';
+                    }
+                });
+        }
+    
+        // Добавить в корзину
+        function addToCart(productId, size, color) {
+            fetch('/cart', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ product_id: productId, size: size, color: color })
+            }).then(() => loadCart());
+        }
+    
+        // Удалить из корзины
+        function removeFromCart(index) {
+            fetch(`/cart/${index}`, { method: 'DELETE' })
+                .then(() => loadCart());
+        }
+    
+        // Загрузка корзины при загрузке страницы
+        document.addEventListener('DOMContentLoaded', loadCart);
+    </script>
 
 
     <div class="video-background" style="height: 85%;">
@@ -83,7 +165,7 @@
 
             <div class="col l4 hide-on-med-and-down" style="padding: 0%;">
                 <div class="about-photo-wrapper">
-                    <img class="about-photo" src="static/ph5.png">
+                    <img class="about-photo" src="static/ph4.png">
                 </div>
             </div>
 
@@ -95,27 +177,42 @@
 
             <div class="col s12 m6 l4 xl3">
                 <div class="product_wrapper">
-                    <img class=" product_image" src="static/ph2.png">
-                    <p class="product_name">Футболка precious</p>
-                    <p class="product_price">2 800₽</p>
-                    <p class="product_desc truncate">только два размера (true oversize)</p>
-                    <div class="buy_button center-align">в корзину</div>
+                    <img class=" product_image" src="static/ph3.png">
+                    <p class="product_name">затычка</p>
+                    <p class="product_price">XXXX₽</p>
+                    <p class="product_desc truncate">держим в тайне</p>
+                    <div class="buy_button center-align">подробнее</div>
                 </div>
             </div>
 
             {% for product in products %}
+                <div class="col s12 m6 l4 xl3">
+                    <div class="product_wrapper">
+                        <!-- Ссылка на страницу товара -->
+                        <a href="{{ url_for('product_page', product_id=product['id']) }}">
+                            <img class="product_image" src="{{ product.images[0] }}" alt="{{ product.name }}">
+                        </a>
+                        <p class="product_name">{{ product.name }}</p>
+                        <p class="product_price">{{ product.price }}</p>
+                        <p class="product_desc truncate">{{ product.description }}</p>
+
+                        <!-- Кнопка "Подробнее" -->
+                        <div class="buy_button center-align">
+                            <a href="{{ url_for('product_page', product_id=product['id']) }}" style="color: white;">подробнее</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
             <div class="col s12 m6 l4 xl3">
                 <div class="product_wrapper">
-                    <img class="product_image" src="{{ product.images[0] }}" alt="{{ product.name }}">
-                    <p class="product_name">{{ product.name }}</p>
-                    <p class="product_desc">{{ product.description }}</p>
-                    <p class="product_price">Price: {{ product.price }} ₽</p>
-                    <p class="product_size">Available Sizes: {{ product.sizes | join(', ') }}</p>
-                    <p class="product_colors">Colors: {{ product.colors | join(', ') }}</p>
-                    <div class="buy_button center-align">Add to Cart</div>
+                    <img class=" product_image" src="static/ph3.png">
+                    <p class="product_name">затычка</p>
+                    <p class="product_price">XXXX₽</p>
+                    <p class="product_desc truncate">держим в тайне</p>
+                    <div class="buy_button center-align">подробнее</div>
                 </div>
             </div>
-            {% endfor %}
 
         </div>
     </div>
@@ -144,4 +241,58 @@
           </div>
         </div>
       </footer>
+
+      <script>
+        function addToCart(productId) {
+            // Получаем выбранный размер и цвет (если есть)
+            const sizeSelect = document.querySelector(`.product_size[data-product-id="${productId}"]`);
+            const colorSelect = document.querySelector(`.product_color[data-product-id="${productId}"]`);
+    
+            const size = sizeSelect ? sizeSelect.value : null;
+            const color = colorSelect ? colorSelect.value : null;
+    
+            // Проверяем, выбран ли размер/цвет, если они обязательны
+            if (sizeSelect && !size) {
+                alert("Пожалуйста, выберите размер.");
+                return;
+            }
+            if (colorSelect && !color) {
+                alert("Пожалуйста, выберите цвет.");
+                return;
+            }
+    
+            // Отправляем POST-запрос для добавления товара в корзину
+            fetch("/cart", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    product_id: productId,
+                    size: size,
+                    color: color
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Уведомление об успешном добавлении
+                    alert("Товар добавлен в корзину!");
+                    // Можно также обновить содержимое корзины
+                    loadCart();
+                } else {
+                    alert("Произошла ошибка при добавлении товара.");
+                }
+            })
+            .catch(error => console.error("Ошибка:", error));
+        }
+    
+        // Функция для обновления содержимого корзины (если нужно)
+        function loadCart() {
+            fetch('/cart')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Текущая корзина:", data);
+                    // Здесь можно обновить отображение корзины
+                });
+        }
+    </script>
+    
 </body>

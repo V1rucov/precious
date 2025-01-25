@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var elems = document.querySelectorAll('.fixed-action-btn');
+            M.FloatingActionButton.init(elems, { direction: "left" });
+        });
+    </script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <title>{{ product.name }}</title>
+</head>
+
+<body>
+    <div class="container" style="min-height: 100vh;">
+        <h1>{{ product.name }}</h1>
+        <div class="row">
+            <!-- Слайдер для фотографий -->
+            <div class="col s12 m4">
+                <div class="slider">
+                    <ul class="slides">
+                        {% for image in product.images %}
+                        <li>
+                            <img src="{{ image }}"> <!-- Изображение -->
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Информация о товаре -->
+            <div class="col s12 m8">
+                <p class="product_price">Цена: {{ product.price }} ₽</p>
+                <p class="product_desc">{{ product.description }}</p>
+
+                <!-- Выбор размера -->
+                <div class="input-field">
+                    <select id="size-select">
+                        <option value="" disabled selected>Выберите размер</option>
+                        {% for size in product.sizes %}
+                        <option value="{{ size }}">{{ size }}</option>
+                        {% endfor %}
+                    </select>
+                    <label>Размер</label>
+                </div>
+
+                <!-- Выбор цвета -->
+                <div class="input-field">
+                    <select id="color-select">
+                        <option value="" disabled selected>Выберите цвет</option>
+                        {% for color in product.colors %}
+                        <option value="{{ color }}">{{ color }}</option>
+                        {% endfor %}
+                    </select>
+                    <label>Цвет</label>
+                </div>
+
+                <!-- Кнопка добавления в корзину -->
+                <div class="buy_button center-align" onclick="addToCart()">Добавить в корзину</div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="page-footer" style="background-color: black;">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12 m6 l4">
+                    <h5 class="white-text">Текстик</h5>
+                    <p class="white-text text-lighten-4">Я хуй знает, брат, что здесь написать</p>
+                </div>
+                <div class="col l4 offset-l2 s12 m6 l4">
+                    <h5 class="white-text">Ещё всякая хуйня и ссылочки</h5>
+                    <ul>
+                        <li><a class="grey-text text-lighten-3" href="#!">Ссылка 1</a></li>
+                        <li><a class="grey-text text-lighten-3" href="#!">Ссылка 2</a></li>
+                        <li><a class="grey-text text-lighten-3" href="#!">Ссылка 3</a></li>
+                        <li><a class="grey-text text-lighten-3" href="#!">Ссылка 4</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright" style="background-color: #151515;">
+            <div class="container">
+                © 2025 preciousforyou.ru
+            </div>
+        </div>
+    </footer>
+
+    <!-- Скрипт для инициализации элементов Materialize -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sliderElems = document.querySelectorAll('.slider');
+            M.Slider.init(sliderElems, {
+                indicators: true,
+                height: 500,
+                duration: 500,
+                interval: 3000
+            });
+
+            const selectElems = document.querySelectorAll('select');
+            M.FormSelect.init(selectElems);
+        });
+
+        function addToCart() {
+            const size = document.getElementById('size-select').value;
+            const color = document.getElementById('color-select').value;
+
+            if (!size || !color) {
+                alert("Пожалуйста, выберите размер и цвет!");
+                return;
+            }
+
+            fetch('/cart', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    product_id: "{{ product.id }}",
+                    size: size,
+                    color: color
+                })
+            }).then(response => {
+                if (response.ok) {
+                    alert("Товар добавлен в корзину!");
+                } else {
+                    alert("Ошибка при добавлении в корзину!");
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

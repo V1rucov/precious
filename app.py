@@ -71,7 +71,9 @@ def add_to_cart():
 
     # Проверяем, существует ли товар с таким ID
     products = load_product_data()
-    product = next((p for p in products if p["id"] == product_id), None)
+    for cc in products:
+        print(cc["id"])
+    product = next((p for p in products if p["id"] == int(product_id)), None)
     if not product:
         return jsonify({"status": "error", "message": "Product not found"}), 404
 
@@ -102,14 +104,23 @@ def get_cart():
     """Get the current cart contents."""
     cart = session.get("cart", [])
     products = load_product_data()
-    cart_details = [
-        {
-            "product": next((p for p in products if p["id"] == item["product_id"]), None),
+
+    print("Загруженные продукты:", products)  # Проверяем, загружаются ли товары
+
+    cart_details = []
+    for item in cart:
+        print("Ищем продукт с ID:", item["product_id"])
+        product = next((p for p in products if p["id"] == int(item["product_id"])), None)
+
+        if product is None:
+            print(f"⚠ Ошибка: продукт с ID {item['product_id']} не найден!")
+
+        cart_details.append({
+            "product": product if product else {"name": "Не найден"},
             "size": item["size"],
             "color": item["color"],
-        }
-        for item in cart
-    ]
+        })
+
     return jsonify(cart_details)
 
 
@@ -118,6 +129,16 @@ def product_file(filename):
     """Serve product images and files."""
     return send_from_directory(PRODUCTS_DIR, filename)
 
+@app.route('/order', methods=['POST'])
+def order():
+    data = request.json
+    if not data or "contacts" not in data or "items" not in data:
+        return jsonify({"error": "Некорректные данные"}), 400
+
+    # Отправляем заказ через бота
+    asyncio.run(send_order_notification(data))
+
+    return jsonify({"message": "Заказ принят"}), 200
 
 
 if __name__ == "__main__":

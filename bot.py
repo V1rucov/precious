@@ -5,8 +5,8 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.types import Message
 from aiogram.filters import Command
 
-TOKEN = "ТОКЕН_БОТА"
-ADMIN_ID = 123456789
+TOKEN = "8032192542:AAE-mmWaOBBVtbubkZfLOWICvqmubkaoKxg"
+ADMIN_ID = "row_wow"
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()

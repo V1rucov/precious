@@ -140,8 +140,10 @@ def order():
 
     return jsonify({"message": "Заказ принят"}), 200
 
-
-if __name__ == "__main__":
+def app():
     app.run(host='0.0.0.0', port=5000, debug=True)
+
+#if __name__ == "__main__":
+    #app.run(host='0.0.0.0', port=5000, debug=True)
     #app.run(ssl_context=('/etc/letsencrypt/live/shop.preciousforyou.ru/fullchain.pem', '/etc/letsencrypt/live/shop.preciousforyou.ru/privkey.pem'),host='0.0.0.0',port=5000,debug=True)
 

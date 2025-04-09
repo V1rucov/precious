@@ -140,7 +140,7 @@ def order():
 
     return jsonify({"message": "Заказ принят"}), 200
 
-def app():
+def app(environ, start_response):
     app.run(host='0.0.0.0', port=5000, debug=True)
 
 #if __name__ == "__main__":

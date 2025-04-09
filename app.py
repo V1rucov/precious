@@ -142,5 +142,6 @@ def order():
 
 
 if __name__ == "__main__":
-    app.run(ssl_context=('/etc/letsencrypt/live/shop.preciousforyou.ru/fullchain.pem', '/etc/letsencrypt/live/shop.preciousforyou.ru/privkey.pem'),host='0.0.0.0',port=5000,debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
+    #app.run(ssl_context=('/etc/letsencrypt/live/shop.preciousforyou.ru/fullchain.pem', '/etc/letsencrypt/live/shop.preciousforyou.ru/privkey.pem'),host='0.0.0.0',port=5000,debug=True)
 

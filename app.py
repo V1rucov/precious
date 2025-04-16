@@ -138,12 +138,12 @@ def order():
 
     # Отправляем заказ через бота
     try:
-        loop = asyncio.get_running_loop()
-        loop.create_task(send_order_notification(data, data2, load_product_data()))  # async-функция как фоновая задача
+        asyncio.create_task(send_order_notification(data, data2, load_product_data()))  # async-функция как фоновая задача
     except RuntimeError:
-        asyncio.run(send_order_notification(data,data2, load_product_data()))  
+        asyncio.create_task(send_order_notification(data, data2, load_product_data()))
 
     return jsonify({"message": "Заказ принят"}), 200
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=False)

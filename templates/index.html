@@ -26,9 +26,9 @@
 
     <div class="nav row" >
 
-        <div class="col xl3 l2 s1"></div>
+        <div class="col s1"></div>
 
-        <div class="col xl6 l8 s10">
+        <div class="col s10">
             <div class="row center-align" style="display: flex; align-items: center; justify-content: center; height: 70px; margin-bottom: 25px;">
                 <a href="https://www.preciousforyou.ru/" style="display: inline; margin-right: 15px;" target="_blank" rel="noopener">
                     <img style="max-width: 70px; max-height: 100%;" src="static/precious_logo.png" alt="логотип">
@@ -38,7 +38,7 @@
             </div>
         </div>
 
-        <div class="col xl3 l2 s1"></div>
+        <div class="col s1"></div>
 
     </div>
 
@@ -59,7 +59,7 @@
         <div class="row">
 
             {% for product in products %}
-                <div class="col s12 m6 l4 xl3">
+                <div class="col s12">
                     <div class="product_wrapper">
                         <!-- Ссылка на страницу товара -->
                         <a href="{{ url_for('product_page', product_id=product['id']) }}">
@@ -94,7 +94,7 @@
     <div id="brand-block" class="about-block">
         <div class="row">
 
-            <div class="col m12 l8">
+            <div class="col xl12">
                 <div class="container">
                     <h2>Кто мы такие?</h2>
                     <div>
@@ -104,12 +104,6 @@
                         <p>Precious — это ты. Настоящий.</p>
                         <p>Наш стиль — это сочетание минимализма и сдержанной дерзости. Символ бренда, растекающийся глаз, передает взгляд на мир сквозь призму эмоций, искусства и уникального восприятия реальности.</p>
                     </div>
-                </div>
-            </div>
-
-            <div class="col l4 hide-on-med-and-down" style="padding: 0%;">
-                <div class="about-photo-wrapper">
-                    <img class="about-photo" src="static/ph4.png">
                 </div>
             </div>
 
@@ -183,16 +177,13 @@
     <footer class="page-footer" style="background-color: black;">
         <div class="container">
           <div class="row">
-            <div class="col l6 s12 m6 l4">
+            <div class="col xl12">
                 <h5 class="white-text">Наши соцсети</h5>
                 <ul>
                   <li><a class="grey-text text-lighten-3" href="https://www.instagram.com/precious.foryou?igsh=MXEzcm1reGg3ZGNiMA%3D%3D&utm_source=qr">Inst</a></li>
                   <li><a class="grey-text text-lighten-3" href="https://t.me/PRECIOUSclothes">TG</a></li>
                   <li><a class="grey-text text-lighten-3" href="https://www.avito.ru/brands/12603b4849e5e73048da21e57220d404">Avito</a></li>
                 </ul>
-            </div>
-            <div class="col l4 offset-l2 s12 m6 l4">
-              
             </div>
           </div>
         </div>

@@ -40,8 +40,6 @@
 
             <!-- Информация о товаре -->
             <div class="col s12 m8">
-                <p class="product_price">Цена: {{ product.price }} ₽</p>
-                <p class="product_desc">{{ product.description }}</p>
 
                 <!-- Выбор размера -->
                 <div class="input-field">
@@ -67,6 +65,10 @@
 
                 <!-- Кнопка добавления в корзину -->
                 <div class="buy_button center-align" onclick="addToCart()">Добавить в корзину</div>
+
+                <p class="product_price">Цена: {{ product.price }} ₽</p>
+                <p class="product_desc">{{ product.description }}</p>
+
             </div>
         </div>
     </div>

@@ -74,7 +74,7 @@ body, html {
     margin: 0%;
     color: #8b0000;
     font-size: 26px;
-    font-weight: bold;
+    font-family: 'guano';
 }
 
 .product_desc {
@@ -132,4 +132,9 @@ body, html {
     object-fit: cover;
     width: 100%;
     height: 100%;
+}
+
+@font-face {
+    font-family: 'guano'; /*a name to be used later*/
+    src: url('/static/Guano\ Apes\ \(Rus\ by\ sherbackoffalex\).otf'); /*URL to font*/
 }

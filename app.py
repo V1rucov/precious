@@ -1,5 +1,7 @@
 from flask import Flask, render_template, jsonify, send_from_directory, request, session, redirect, url_for
 import os
+from bot import send_order_notification
+import asyncio
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"  # Замените на собственный секретный ключ
@@ -105,8 +107,6 @@ def get_cart():
     cart = session.get("cart", [])
     products = load_product_data()
 
-    print("Загруженные продукты:", products)  # Проверяем, загружаются ли товары
-
     cart_details = []
     for item in cart:
         print("Ищем продукт с ID:", item["product_id"])
@@ -134,13 +134,18 @@ def order():
     data = request.json
     if not data or "contacts" not in data or "items" not in data:
         return jsonify({"error": "Некорректные данные"}), 400
+    data2 = session.get("cart", [])
 
     # Отправляем заказ через бота
-    asyncio.run(send_order_notification(data))
+    try:
+        loop = asyncio.get_running_loop()
+        loop.create_task(send_order_notification(data, data2, load_product_data()))  # async-функция как фоновая задача
+    except RuntimeError:
+        asyncio.run(send_order_notification(data,data2, load_product_data()))  
 
     return jsonify({"message": "Заказ принят"}), 200
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)
     #app.run(ssl_context=('/etc/letsencrypt/live/shop.preciousforyou.ru/fullchain.pem', '/etc/letsencrypt/live/shop.preciousforyou.ru/privkey.pem'),host='0.0.0.0',port=5000,debug=True)
 

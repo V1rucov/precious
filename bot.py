@@ -8,7 +8,14 @@ import os
 TOKEN = os.getenv("BOT_TOKEN")
 ADMIN_ID = os.getenv("ADMIN_ID")
 
+bot = Bot(token=TOKEN)
+dp = Dispatcher()
+
 logging.basicConfig(level=logging.INFO)
+
+@dp.message(Command("start"))
+async def start_handler(message: Message):
+    await message.answer("Привет! Я бот для уведомлений о заказах.")
 
 async def send_order_notification(order_data, pdata, products):
     try:
@@ -33,3 +40,6 @@ async def send_order_notification(order_data, pdata, products):
 
     except Exception as e:
         logging.error(f"Ошибка при отправке уведомления: {e}")
+
+async def main():
+    await dp.start_polling(bot)

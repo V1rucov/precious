@@ -25,7 +25,7 @@ async def send_order_notification(order_data, pdata, products):
         text = f"📦 *Новый заказ!*\n\n👤 *Контакты клиента:*\n{order_data['contacts']}\n\n🛍 *Список товаров:*\n"
 
         for item in pdata:
-            pid = item.get('product_id')
+            pid = int(item.get('product_id'))
             product = next((p for p in products if p['id'] == pid), None)
 
             if product:

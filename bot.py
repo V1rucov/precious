@@ -22,7 +22,7 @@ async def send_order_notification(order_data, pdata, products):
     try:
         bot = Bot(token=TOKEN)
 
-        text = f"📦 *Новый заказ!*\n\n👤 *Контакты клиента:*\n{order_data['contacts']}\n\n🛍 *Список товаров:*\n"
+        text = f"📦 Новый заказ!\n\n👤 Контакты клиента: {order_data['contacts']}\n\n🛍 Список товаров:\n"
 
         for item in pdata:
             pid = int(item.get('product_id'))
@@ -36,7 +36,7 @@ async def send_order_notification(order_data, pdata, products):
             else:
                 text += f" - ❗️Неизвестный товар (ID: {pid})\n"
 
-        await bot.send_message(chat_id=ADMIN_ID, text=text, parse_mode="Markdown")
+        await bot.send_message(chat_id=ADMIN_ID, text=text)
         await bot.session.close()
 
     except Exception as e:

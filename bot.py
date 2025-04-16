@@ -1,3 +1,4 @@
+import aiogram
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 from aiogram.types import Message
@@ -35,7 +36,7 @@ async def send_order_notification(order_data, pdata, products):
             else:
                 text += f" - ❗️Неизвестный товар (ID: {pid})\n"
 
-        await bot.send_message(chat_id=ADMIN_ID, text=text, parse_mode=ParseMode.MARKDOWN)
+        await bot.send_message(chat_id=ADMIN_ID, text=text, parse_mode="Markdown")
         await bot.session.close()
 
     except Exception as e:

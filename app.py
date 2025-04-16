@@ -137,10 +137,11 @@ def order():
     data2 = session.get("cart", [])
 
     # Отправляем заказ через бота
+    products = load_product_data()
     try:
-        asyncio.create_task(send_order_notification(data, data2, load_product_data()))  # async-функция как фоновая задача
+        asyncio.create_task(send_order_notification(data, data2, products))  # async-функция как фоновая задача
     except RuntimeError:
-        asyncio.create_task(send_order_notification(data, data2, load_product_data()))
+        asyncio.create_task(send_order_notification(data, data2, products))
 
     return jsonify({"message": "Заказ принят"}), 200
 

@@ -1,3 +1,28 @@
+@media only screen and (max-width: 600px) {
+    h1, h2, h3, h4, h5, h6 {
+        font-size: 1.5rem;
+    }
+    .product_name, .product_price, .product_desc {
+        font-size: 1.2rem;
+        text-align: center;
+    }
+    .buy_button {
+        width: 100%;
+        margin-top: 10px;
+    }
+    .product_wrapper {
+        padding: 10px;
+    }
+    .nav .row {
+        flex-direction: column;
+        align-items: center;
+    }
+    .video-background h1 {
+        font-size: 2rem;
+    }
+}
+
+
 /* Стили для body и html */
 * {
     font-family: "Montserrat", serif;

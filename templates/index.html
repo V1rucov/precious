@@ -16,7 +16,11 @@
             document.addEventListener('DOMContentLoaded', function() {
                 var elems = document.querySelectorAll('.fixed-action-btn');
                 var instances = M.FloatingActionButton.init(elems, {direction: "left"});
+
+                var elems = document.querySelectorAll('.modal');
+                var instances = M.Modal.init(elems);
             });
+
     </script>
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -63,28 +67,31 @@
     </div>
 
     <!-- Корзина -->
-    <div class="cart-btn fixed-action-btn" style="right: 24px; bottom: 24px;">
-        <a class="btn-floating btn-large black" onclick="toggleCart()"><i class="large material-icons">shopping_cart</i></a>
-    
-        <!-- Контейнер корзины -->
-        <div id="cart-container" class="cart-hover-area">
+     
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large black modal-trigger" href="#modal1">
+          <i class="large material-icons">shopping_cart</i>
+        </a>
+    </div>
+
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>корзина</h4>
             <ul id="cart-items" class="collection" style="margin: 0;"></ul>
             <div id="order-button-container" class="center-align" style="padding: 10px;"></div>
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class="modal-close waves-effect waves-green btn-flat">сыглы</a>
         </div>
     </div>
 
     <script>
 
         const cartItems = document.getElementById('cart-items');
-
-        function toggleCart() {
-            const container = document.getElementById('cart-container');
-            container.classList.toggle('open');
-            }
     
         // Функция загрузки корзины
         function loadCart() {
-            fetch('/cart')
+            fetch(`/cart?_=${Date.now()}`)
                 .then(response => response.json())
                 .then(data => {
                     cartItems.innerHTML = ''; // Очистить старые элементы
@@ -133,8 +140,12 @@
         // Удалить из корзины
         function removeFromCart(index) {
             fetch(`/cart/${index}`, { method: 'DELETE' })
-                .then(() => loadCart());
-            loadCart();
+                .then(response => {
+                    if (!response.ok) throw new Error('Ошибка удаления');
+                    return response.text(); // или .json(), если сервер возвращает данные
+                })
+                .then(() => loadCart())
+                .catch(err => console.error(err));
         }
     
         // Загрузка корзины при загрузке страницы

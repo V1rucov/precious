@@ -161,39 +161,3 @@ body, html {
     font-family: 'guano'; /*a name to be used later*/
     src: url('/static/Guano\ Apes\ \(Rus\ by\ sherbackoffalex\).otf'); /*URL to font*/
 }
-
-
-
-
-
-
-
-
-
-
-
-
-.cart-hover-area {
-    display: none;
-    position: absolute;
-    bottom: 70px;
-    right: 0;
-    width: 500px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    padding: 10px;
-    min-height: 400px;
-    overflow-y: auto;
-    z-index: 999;
-  }
-  
-  .cart-hover-area.open {
-    display: block;
-  }
-
-  li {
-    width: 82%;
-    display: flex;
-    margin: 0;
-}

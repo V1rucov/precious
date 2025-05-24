@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var elems = document.querySelectorAll('.fixed-action-btn');
@@ -21,6 +21,12 @@
     </script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <title>{{ product.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .indicator-item.active {
+            background-color: black !important;
+        }
+    </style>
 </head>
 
 <body style="background-color: white;">
@@ -42,28 +48,6 @@
 
             <!-- Информация о товаре -->
             <div class="col s12">
-
-                <!-- Выбор размера -->
-                <div class="input-field">
-                    <select id="size-select">
-                        <option value="" disabled selected>Выберите размер</option>
-                        {% for size in product.sizes %}
-                        <option value="{{ size }}">{{ size }}</option>
-                        {% endfor %}
-                    </select>
-                    <label>Размер</label>
-                </div>
-
-                <!-- Выбор цвета -->
-                <div class="input-field">
-                    <select id="color-select">
-                        <option value="" disabled selected>Выберите цвет</option>
-                        {% for color in product.colors %}
-                        <option value="{{ color }}">{{ color }}</option>
-                        {% endfor %}
-                    </select>
-                    <label>Цвет</label>
-                </div>
 
                 <!-- Кнопка добавления в корзину -->
                 <div class="buy_button center-align" onclick="addToCart()">Добавить в корзину</div>

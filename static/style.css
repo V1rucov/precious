@@ -23,6 +23,14 @@
 }
 
 
+
+
+
+
+
+
+
+
 /* Стили для body и html */
 * {
     font-family: "Montserrat", serif;
@@ -161,3 +169,4 @@ body, html {
     font-family: 'guano'; /*a name to be used later*/
     src: url('/static/Guano\ Apes\ \(Rus\ by\ sherbackoffalex\).otf'); /*URL to font*/
 }
+

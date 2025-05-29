@@ -56,8 +56,8 @@ body, html {
 /* Само видео */
 .video-background video {
     position: absolute;
-    top: 80%;
-    left: 50%;
+    top: 84%;
+    left: 52%;
     transform: translate(-50%, -50%);
     min-width: 100%;
     min-height: 100%;

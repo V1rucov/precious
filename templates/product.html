@@ -49,6 +49,28 @@
             <!-- Информация о товаре -->
             <div class="col s12">
 
+                <!-- Выбор размера -->
+                <div class="input-field hide">
+                    <select id="size-select">
+                        <option value="" disabled>Выберите размер</option>
+                        {% for size in product.sizes %}
+                        <option value="{{ size }}" selected>{{ size }}</option>
+                        {% endfor %}
+                    </select>
+                    <label>Размер</label>
+                </div>
+
+                <!-- Выбор цвета -->
+                <div class="input-field hide">
+                    <select id="color-select">
+                        <option value="" disabled>Выберите цвет</option>
+                        {% for color in product.colors %}
+                        <option value="{{ color }}" selected>{{ color }}</option>
+                        {% endfor %}
+                    </select>
+                    <label>Цвет</label>
+                </div>
+
                 <!-- Кнопка добавления в корзину -->
                 <div class="buy_button center-align" onclick="addToCart()">Добавить в корзину</div>
                 <div class="buy_button center-align" onclick="location.href='/';" style="margin-top: 15px;" >вернуться</div>

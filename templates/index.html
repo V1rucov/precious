@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://kit.fontawesome.com/f107744b9e.js" crossorigin="anonymous"></script>
     <script>
             document.addEventListener('DOMContentLoaded', function() {
                 var elems = document.querySelectorAll('.fixed-action-btn');
@@ -45,20 +46,14 @@
         <div class="row">
 
             {% for product in products %}
-                <div class="col s12">
+                <div class="col s6">
                     <div class="product_wrapper">
                         <!-- Ссылка на страницу товара -->
                         <a href="{{ url_for('product_page', product_id=product['id']) }}">
                             <img class="product_image" src="{{ product.images[0] }}" alt="{{ product.name }}">
                         </a>
                         <p class="product_name">{{ product.name }}</p>
-                        <p class="product_price">{{ product.price }}</p>
-                        <p class="product_desc truncate">{{ product.description }}</p>
-
-                        <!-- Кнопка "Подробнее" -->
-                        <div class="buy_button center-align">
-                            <a href="{{ url_for('product_page', product_id=product['id']) }}" style="color: white;">подробнее</a>
-                        </div>
+                        <p class="product_price">{{ product.price }}₽</p>
                     </div>
                 </div>
             {% endfor %}
@@ -157,6 +152,11 @@
           <div class="container">
           © 2025 preciousforyou.ru
           </div>
+          <div class="">
+          <i class="fa-brands fa-instagram"></i>
+          <i class="fa-brands fa-tiktok"></i>
+          <i class="fa-brands fa-telegram"></i>
+          </div>
         </div>
     </footer>
 
@@ -213,7 +213,7 @@
         }
 
         function sendOrder() {
-            let contacts = prompt("Введите ваш телефон или Telegram:");
+            let contacts = prompt("Введите ваш номер телефона или Telegram: наш менеджер свяжется с вами для оплаты и согласования доставки");
             if (!contacts) {
                 alert("Контакты обязательны!");
                 return;

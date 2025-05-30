@@ -88,7 +88,7 @@ body, html {
 
 .product_wrapper {
     margin-top: 15px;
-    height: 670px;
+    height: 400px;
     width: 100%;
     padding: 0%;
 }
@@ -99,15 +99,15 @@ body, html {
 
 .product_price {
     margin: 0%;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
 }
 
 .product_name {
     margin: 0%;
     color: #8b0000;
-    font-size: 26px;
-    font-family: 'guano';
+    font-size: 20px;
+    font-weight: bold;
 }
 
 .product_desc {
@@ -117,7 +117,7 @@ body, html {
 
 .product_image {
     border-radius: 25px;
-    height: 450px;
+    height: 250px;
     width: 100%;
     object-fit: cover;
     object-position: 50% 10%;

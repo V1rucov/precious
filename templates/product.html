@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    
+    <script src="https://kit.fontawesome.com/f107744b9e.js" crossorigin="anonymous"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var elems = document.querySelectorAll('.fixed-action-btn');
@@ -31,7 +31,7 @@
 
 <body style="background-color: white;">
     <div class="container" style="min-height: 100vh;">
-        <h1>{{ product.name }}</h1>
+        <h1 style="font-weight: bold; color: #8b0000;">{{ product.name }}</h1>
         <div class="row">
             <!-- Слайдер для фотографий -->
             <div class="col s12">
@@ -75,7 +75,7 @@
                 <div class="buy_button center-align" onclick="addToCart()">Добавить в корзину</div>
                 <div class="buy_button center-align" onclick="location.href='/';" style="margin-top: 15px;" >вернуться</div>
 
-                <p class="product_price">Цена: {{ product.price }} ₽</p>
+                <p class="product_price">Цена: {{ product.price }}₽</p>
                 <p class="product_desc">{{ product.description }}</p>
 
             </div>

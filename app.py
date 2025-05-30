@@ -143,7 +143,7 @@ def order():
     except RuntimeError:
         asyncio.run(send_order_notification(data, data2, products))
 
-    return jsonify({"message": "Заказ принят"}), 200
+    return jsonify({"message": "Совсем скоро с вами свяжется наш менеджер. Если у вас остались вопросы, вы можете связаться с ним напрямую - @fs_precious"}), 200
 
 
 if __name__ == "__main__":

@@ -29,6 +29,14 @@
 
 <body style="background-color: #FFFFFF;">
 
+    <div id="video-overlay">
+        <video id="intro-video" autoplay muted>
+            <source src="static/intro.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+        </video>
+        <button id="skip-btn">Пропустить</button>
+    </div>
+
     <div class="video-background" style="height: 60%;">
         <!-- Вставка YouTube-видео -->
         <div class="video-background">
@@ -231,4 +239,33 @@
         }
 
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        const overlay = document.getElementById('video-overlay');
+        const video = document.getElementById('intro-video');
+        const skipBtn = document.getElementById('skip-btn');
+
+        // Проверка: уже видел ли пользователь видео
+        const hasSeen = localStorage.getItem('videoSeen');
+
+        if (!hasSeen) {
+            overlay.style.display = 'flex';
+            video.play();
+
+            // После окончания видео — скрываем и ставим флаг
+            video.onended = () => {
+            overlay.style.display = 'none';
+            localStorage.setItem('videoSeen', 'true');
+            };
+
+            // Кнопка "Пропустить"
+            skipBtn.onclick = () => {
+            video.pause();
+            overlay.style.display = 'none';
+            localStorage.setItem('videoSeen', 'true');
+            };
+        }
+        });
+  </script>
 </body>

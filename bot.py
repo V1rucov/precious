@@ -6,10 +6,10 @@ import asyncio
 import logging
 import os
 
-TOKEN = os.getenv("BOT_TOKEN")
-ADMIN_ID = os.getenv("ADMIN_ID")
+#TOKEN = os.getenv("BOT_TOKEN")
+#ADMIN_ID = os.getenv("ADMIN_ID")
 
-bot = Bot(token=TOKEN)
+#bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
 logging.basicConfig(level=logging.INFO)

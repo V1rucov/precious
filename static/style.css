@@ -94,13 +94,9 @@ body, html {
 
 .product_wrapper {
     margin-top: 15px;
-    height: 400px;
+    height: 320px;
     width: 100%;
     padding: 0%;
-}
-
-.product_wrapper p{
-    margin-left: 15px;
 }
 
 .product_price {
@@ -112,7 +108,7 @@ body, html {
 .product_name {
     margin: 0%;
     color: #8b0000;
-    font-size: 20px;
+    font-size: 14px;
     font-weight: bold;
 }
 
@@ -214,4 +210,24 @@ body, html {
       font-size: 16px;
       cursor: pointer;
       border-radius: 5px;
+    }
+
+
+
+
+    .carousel-precious-item {
+        border-radius: 25px;
+        height: 360px;
+        object-fit: cover;
+        object-position: 50% 10%;
+    }
+
+    .carousel {
+        margin-top: -180px;
+        height: 560px;
+        margin-bottom: 0px;
+    }
+
+    .carousel-item {
+        width: 100%;
     }

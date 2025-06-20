@@ -7,25 +7,108 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://kit.fontawesome.com/f107744b9e.js" crossorigin="anonymous"></script>
-    <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var elems = document.querySelectorAll('.fixed-action-btn');
-                var instances = M.FloatingActionButton.init(elems, {direction: "left"});
-
-                var elems = document.querySelectorAll('.modal');
-                var instances = M.Modal.init(elems);
-            });
-
-    </script>
-
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 </head>
+
+<script>
+    document.addEventListener('DOMContentLoaded', loadCart);
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.fixed-action-btn');
+        var instances = M.FloatingActionButton.init(elems, {direction: "left"});
+
+        var elems = document.querySelectorAll('.modal');
+        var instances = M.Modal.init(elems);
+    });
+
+    const cartItems = document.getElementById('cart-items');
+
+    // Функция загрузки корзины
+    function loadCart() {
+        const cartItems = document.getElementById('cart-items');
+        fetch(`/cart?_=${Date.now()}`)
+            .then(response => response.json())
+            .then(data => {
+                cartItems.innerHTML = ''; // Очистить старые элементы
+                const buttonContainer = document.getElementById('order-button-container');
+                buttonContainer.innerHTML = ''; // Убрать кнопку, если она уже есть
+
+                if (data.length === 0) {
+                    cartItems.innerHTML = '<li class="collection-item">Пока пусто(</li>';
+                    return; 
+                }
+
+                data.forEach((item, index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <div class="row" style="display: flex; align-items: center;">
+                            <div style="flex: 0 0 auto; margin-right: 10px;">
+                                <a onclick="removeFromCart(${index})">
+                                    <i class="material-icons" style="color: red; cursor: pointer;">close</i>
+                                </a>
+                            </div>
+                            <div style="flex: 1;">
+                                <p style="margin: 0;">
+                                    ${item.product.name} (${item.size || 'No size'}, ${item.color || 'No color'})
+                                </p>
+                            </div>
+                        </div>`;
+                    cartItems.appendChild(li);
+                });
+
+                // Добавим кнопку "Заказать"
+                const li2 = document.createElement('li');
+                li2.innerHTML = `<div class="buy_button center-align" onClick="sendOrder()">заказать</div>`;
+                cartItems.appendChild(li2);
+            });
+    }
+
+    // Добавить в корзину
+    function addToCart(productId, size, color) {
+        fetch('/cart', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_id: productId, size: size, color: color })
+        }).then(() => loadCart());
+    }
+
+    // Удалить из корзины
+    function removeFromCart(index) {
+        fetch(`/cart/${index}`, { method: 'DELETE' })
+            .then(response => {
+                if (!response.ok) throw new Error('Ошибка удаления');
+                return response.text(); // или .json(), если сервер возвращает данные
+            })
+            .catch(err => console.error(err));
+        setTimeout(function(){ loadCart(); }, 500);
+    }
+
+    // Загрузка корзины при загрузке страницы
+    document.addEventListener('DOMContentLoaded', loadCart);
+
+    function sendOrder() {
+        let contacts = prompt("Введите ваш номер телефона или Telegram: наш менеджер свяжется с вами для оплаты и согласования доставки");
+        if (!contacts) {
+            alert("Контакты обязательны!");
+            return;
+        }
+
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        fetch('/order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contacts: contacts, items: cart })
+        }).then(response => response.json())
+        .then(data => alert(data.message))
+        .catch(error => alert("Ошибка при отправке заказа"));
+    }
+</script>
 
 <body style="background-color: #FFFFFF;">
 
@@ -61,7 +144,6 @@
                             <img class="product_image" src="{{ product.images[0] }}" alt="{{ product.name }}">
                         </a>
                         <p class="product_name">{{ product.name }}</p>
-                        <p class="product_price">{{ product.price }}₽</p>
                     </div>
                 </div>
             {% endfor %}
@@ -88,73 +170,6 @@
         </div>
     </div>
 
-    <script>
-
-        const cartItems = document.getElementById('cart-items');
-    
-        // Функция загрузки корзины
-        function loadCart() {
-            fetch(`/cart?_=${Date.now()}`)
-                .then(response => response.json())
-                .then(data => {
-                    cartItems.innerHTML = ''; // Очистить старые элементы
-                    const buttonContainer = document.getElementById('order-button-container');
-                    buttonContainer.innerHTML = ''; // Убрать кнопку, если она уже есть
-
-                    if (data.length === 0) {
-                        cartItems.innerHTML = '<li class="collection-item">Пока пусто(</li>';
-                        return; 
-                    }
-
-                    data.forEach((item, index) => {
-                        const li = document.createElement('li');
-                        li.innerHTML = `
-                            <div class="row" style="display: flex; align-items: center;">
-                                <div style="flex: 0 0 auto; margin-right: 10px;">
-                                    <a onclick="removeFromCart(${index})">
-                                        <i class="material-icons" style="color: red; cursor: pointer;">close</i>
-                                    </a>
-                                </div>
-                                <div style="flex: 1;">
-                                    <p style="margin: 0;">
-                                        ${item.product.name} (${item.size || 'No size'}, ${item.color || 'No color'})
-                                    </p>
-                                </div>
-                            </div>`;
-                        cartItems.appendChild(li);
-                    });
-
-                    // Добавим кнопку "Заказать"
-                    const li2 = document.createElement('li');
-                    li2.innerHTML = `<div class="buy_button center-align" onClick="sendOrder()">заказать</div>`;
-                    cartItems.appendChild(li2);
-                });
-        }
-    
-        // Добавить в корзину
-        function addToCart(productId, size, color) {
-            fetch('/cart', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ product_id: productId, size: size, color: color })
-            }).then(() => loadCart());
-        }
-    
-        // Удалить из корзины
-        function removeFromCart(index) {
-            fetch(`/cart/${index}`, { method: 'DELETE' })
-                .then(response => {
-                    if (!response.ok) throw new Error('Ошибка удаления');
-                    return response.text(); // или .json(), если сервер возвращает данные
-                })
-                .catch(err => console.error(err));
-            setTimeout(function(){ loadCart(); }, 500);
-        }
-    
-        // Загрузка корзины при загрузке страницы
-        document.addEventListener('DOMContentLoaded', loadCart);
-    </script>
-
     <footer class="page-footer" style="background-color: white;">
         <div class="footer-copyright" style="background-color: #151515;">
           <div class="container">
@@ -162,68 +177,6 @@
           </div>
         </div>
     </footer>
-
-      <script>
-        function addToCart(productId) {
-            // Получаем выбранный размер и цвет (если есть)
-            const sizeSelect = document.querySelector(`.product_size[data-product-id="${productId}"]`);
-            const colorSelect = document.querySelector(`.product_color[data-product-id="${productId}"]`);
-    
-            const size = sizeSelect ? sizeSelect.value : null;
-            const color = colorSelect ? colorSelect.value : null;
-    
-            // Проверяем, выбран ли размер/цвет, если они обязательны
-            if (sizeSelect && !size) {
-                alert("Пожалуйста, выберите размер.");
-                return;
-            }
-            if (colorSelect && !color) {
-                alert("Пожалуйста, выберите цвет.");
-                return;
-            }
-    
-            // Отправляем POST-запрос для добавления товара в корзину
-            fetch("/cart", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    product_id: productId,
-                    size: size,
-                    color: color
-                })
-            })
-            .then(response => {
-                if (response.ok) {
-                    // Уведомление об успешном добавлении
-                    alert("Товар добавлен в корзину!");
-                    // Можно также обновить содержимое корзины
-                    loadCart();
-                } else {
-                    alert("Произошла ошибка при добавлении товара.");
-                }
-            })
-            .catch(error => console.error("Ошибка:", error));
-        }
-
-        function sendOrder() {
-            let contacts = prompt("Введите ваш номер телефона или Telegram: наш менеджер свяжется с вами для оплаты и согласования доставки");
-            if (!contacts) {
-                alert("Контакты обязательны!");
-                return;
-            }
-
-            let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-            fetch('/order', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contacts: contacts, items: cart })
-            }).then(response => response.json())
-            .then(data => alert(data.message))
-            .catch(error => alert("Ошибка при отправке заказа"));
-        }
-
-    </script>
 
     <!--
     Видик в начале

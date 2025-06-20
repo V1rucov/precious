@@ -6,124 +6,33 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://kit.fontawesome.com/f107744b9e.js" crossorigin="anonymous"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var elems = document.querySelectorAll('.fixed-action-btn');
-            M.FloatingActionButton.init(elems, { direction: "left" });
-        });
-    </script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <title>{{ product.name }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="/static/style.css">
+
     <style>
         .indicator-item.active {
             background-color: black !important;
         }
     </style>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var elems = document.querySelectorAll('.fixed-action-btn');
-            var instances = M.FloatingActionButton.init(elems, {direction: "left"});
-
-            var elems = document.querySelectorAll('.modal');
-            var instances = M.Modal.init(elems);
-        });
-    </script>
+    <title>{{ product.name }}</title>
 </head>
 
-<body style="background-color: white;">
-    <div class="container" style="min-height: 100vh;">
-        <h1 style="font-weight: bold; color: #8b0000;">{{ product.name }}</h1>
-        <div class="row">
-            <!-- Слайдер для фотографий -->
-            <div class="col s12">
-                <div class="slider">
-                    <ul class="slides">
-                        {% for image in product.images %}
-                        <li>
-                            <img src="{{ image }}"> <!-- Изображение -->
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Информация о товаре -->
-            <div class="col s12">
-
-                <!-- Выбор размера -->
-                <div class="input-field hide">
-                    <select id="size-select">
-                        <option value="" disabled>Выберите размер</option>
-                        {% for size in product.sizes %}
-                        <option value="{{ size }}" selected>{{ size }}</option>
-                        {% endfor %}
-                    </select>
-                    <label>Размер</label>
-                </div>
-
-                <!-- Выбор цвета -->
-                <div class="input-field hide">
-                    <select id="color-select">
-                        <option value="" disabled>Выберите цвет</option>
-                        {% for color in product.colors %}
-                        <option value="{{ color }}" selected>{{ color }}</option>
-                        {% endfor %}
-                    </select>
-                    <label>Цвет</label>
-                </div>
-
-                <!-- Кнопка добавления в корзину -->
-                <div class="buy_button center-align" onclick="addToCart()">Добавить в корзину</div>
-                <div class="buy_button center-align" onclick="location.href='/';" style="margin-top: 15px;" >вернуться</div>
-
-                <p class="product_price">Цена: {{ product.price }}₽</p>
-                <p class="product_desc">{{ product.description }}</p>
-
-            </div>
-        </div>
-    </div>
-
-    <footer class="page-footer" style="background-color: white;">
-        <div class="footer-copyright" style="background-color: #151515;">
-          <div class="container">
-          © 2025 preciousforyou.ru
-          </div>
-        </div>
-    </footer>
-
-    <!-- Скрипт для инициализации элементов Materialize -->
     <script>
 
-    </script>
+          document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.carousel');
+            var instances = M.Carousel.init(elems);
+        });
 
-    <!--КОРЗИНА-->
-    <div class="fixed-action-btn">
-        <a class="btn-floating btn-large black modal-trigger" href="#modal1">
-          <i class="large material-icons">shopping_cart</i>
-        </a>
-    </div>
-
-    <div id="modal1" class="modal">
-        <div class="modal-content">
-            <h4>корзина</h4>
-            <ul id="cart-items" class="collection" style="margin: 0;"></ul>
-            <div id="order-button-container" class="center-align" style="padding: 10px;"></div>
-        </div>
-        <div class="modal-footer">
-          <a href="#!" class="modal-close waves-effect waves-green btn-flat">ОК</a>
-        </div>
-    </div>
-
-    <script>
+        document.addEventListener('DOMContentLoaded', loadCart);
         document.addEventListener('DOMContentLoaded', function () {
             const sliderElems = document.querySelectorAll('.slider');
             M.Slider.init(sliderElems, {
@@ -135,6 +44,14 @@
 
             const selectElems = document.querySelectorAll('select');
             M.FormSelect.init(selectElems);
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.fixed-action-btn');
+            var instances = M.FloatingActionButton.init(elems, {direction: "left"});
+
+            var elems = document.querySelectorAll('.modal');
+            var instances = M.Modal.init(elems);
         });
 
         function addToCart() {
@@ -164,10 +81,6 @@
             setTimeout(function(){ loadCart(); }, 500);
         }
 
-
-
-
-
         function sendOrder() {
             let contacts = prompt("Введите ваш номер телефона или Telegram: наш менеджер свяжется с вами для оплаты и согласования доставки");
             if (!contacts) {
@@ -186,10 +99,8 @@
             .catch(error => alert("Ошибка при отправке заказа"));
         }
 
-        const cartItems = document.getElementById('cart-items');
-    
-        // Функция загрузки корзины
         function loadCart() {
+            const cartItems = document.getElementById('cart-items');
             fetch(`/cart?_=${Date.now()}`)
                 .then(response => response.json())
                 .then(data => {
@@ -226,8 +137,7 @@
                     cartItems.appendChild(li2);
                 });
         }
-    
-        // Удалить из корзины
+
         function removeFromCart(index) {
             fetch(`/cart/${index}`, { method: 'DELETE' })
                 .then(response => {
@@ -236,11 +146,82 @@
                 }).catch(err => console.error(err));
             setTimeout(function(){ loadCart(); }, 500);
         }
-    
-        // Загрузка корзины при загрузке страницы
-        document.addEventListener('DOMContentLoaded', loadCart);
     </script>
 
-</body>
+    <body style="background-color: white;">
+        <div class="container" style="min-height: 100vh;">
+            <h1 style="font-weight: bold; color: #8b0000;">{{ product.name }}</h1>
+            <div class="row">
+
+                <!-- Слайдер для фотографий -->
+                <div class="carousel">
+                    {% for image in product.images %}
+                            <a style="max-width: 400px;" class="carousel-item"><img class="carousel-precious-item" src="{{ image }}"></a>
+                    {% endfor %}
+                </div>
+
+                <!-- Информация о товаре -->
+                <div class="col s12">
+
+                    <!-- Выбор размера -->
+                    <div class="input-field hide">
+                        <select id="size-select">
+                            <option value="" disabled>Выберите размер</option>
+                            {% for size in product.sizes %}
+                            <option value="{{ size }}" selected>{{ size }}</option>
+                            {% endfor %}
+                        </select>
+                        <label>Размер</label>
+                    </div>
+
+                    <!-- Выбор цвета -->
+                    <div class="input-field hide">
+                        <select id="color-select">
+                            <option value="" disabled>Выберите цвет</option>
+                            {% for color in product.colors %}
+                            <option value="{{ color }}" selected>{{ color }}</option>
+                            {% endfor %}
+                        </select>
+                        <label>Цвет</label>
+                    </div>
+
+                    <!-- Кнопка добавления в корзину -->
+                    <div class="buy_button center-align" onclick="addToCart()">Добавить в корзину</div>
+                    <div class="buy_button center-align" onclick="location.href='/';" style="margin-top: 15px;" >вернуться</div>
+
+                    <p class="product_price">Цена: {{ product.price }}₽</p>
+                    <p class="product_desc">{{ product.description }}</p>
+
+                </div>
+            </div>
+        </div>
+
+        <!--КОРЗИНА-->
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large black modal-trigger" href="#modal1">
+            <i class="large material-icons">shopping_cart</i>
+            </a>
+        </div>
+
+        <div id="modal1" class="modal">
+            <div class="modal-content">
+                <h4>корзина</h4>
+                <ul id="cart-items" class="collection" style="margin: 0;"></ul>
+                <div id="order-button-container" class="center-align" style="padding: 10px;"></div>
+            </div>
+            <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">ОК</a>
+            </div>
+        </div>
+
+        <footer class="page-footer" style="background-color: white;">
+            <div class="footer-copyright" style="background-color: #151515;">
+                <div class="container">
+                © 2025 preciousforyou.ru
+                </div>
+            </div>
+        </footer>
+
+    </body>
 
 </html>

@@ -29,18 +29,19 @@
 
 <body style="background-color: #FFFFFF;">
 
+    <!-- видик интро
     <div id="video-overlay">
         <video id="intro-video" autoplay muted>
             <source src="static/intro.mp4" type="video/mp4">
             Ваш браузер не поддерживает видео.
         </video>
     </div>
+    -->
 
     <div class="video-background" style="height: 60%;">
-        <!-- Вставка YouTube-видео -->
         <div class="video-background">
             <video autoplay muted loop>
-                <source src="static/versace-cut.mp4" type="video/mp4">
+                <source src="static/versace-cut.mov" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
             <div class="content">
@@ -146,8 +147,8 @@
                     if (!response.ok) throw new Error('Ошибка удаления');
                     return response.text(); // или .json(), если сервер возвращает данные
                 })
-                .then(() => loadCart())
                 .catch(err => console.error(err));
+            setTimeout(function(){ loadCart(); }, 500);
         }
     
         // Загрузка корзины при загрузке страницы
@@ -208,16 +209,6 @@
             })
             .catch(error => console.error("Ошибка:", error));
         }
-    
-        // Функция для обновления содержимого корзины (если нужно)
-        function loadCart() {
-            fetch('/cart')
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Текущая корзина:", data);
-                    // Здесь можно обновить отображение корзины
-                });
-        }
 
         function sendOrder() {
             let contacts = prompt("Введите ваш номер телефона или Telegram: наш менеджер свяжется с вами для оплаты и согласования доставки");
@@ -239,6 +230,8 @@
 
     </script>
 
+    <!--
+    Видик в начале
     <script>
         document.addEventListener('DOMContentLoaded', function () {
         const overlay = document.getElementById('video-overlay');
@@ -281,5 +274,5 @@
         });
 
 
-  </script>
+  </script> -->
 </body>

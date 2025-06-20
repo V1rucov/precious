@@ -27,6 +27,16 @@
             background-color: black !important;
         }
     </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.fixed-action-btn');
+            var instances = M.FloatingActionButton.init(elems, {direction: "left"});
+
+            var elems = document.querySelectorAll('.modal');
+            var instances = M.Modal.init(elems);
+        });
+    </script>
 </head>
 
 <body style="background-color: white;">
@@ -92,6 +102,28 @@
 
     <!-- Скрипт для инициализации элементов Materialize -->
     <script>
+
+    </script>
+
+    <!--КОРЗИНА-->
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large black modal-trigger" href="#modal1">
+          <i class="large material-icons">shopping_cart</i>
+        </a>
+    </div>
+
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>корзина</h4>
+            <ul id="cart-items" class="collection" style="margin: 0;"></ul>
+            <div id="order-button-container" class="center-align" style="padding: 10px;"></div>
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class="modal-close waves-effect waves-green btn-flat">ОК</a>
+        </div>
+    </div>
+
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
             const sliderElems = document.querySelectorAll('.slider');
             M.Slider.init(sliderElems, {
@@ -129,8 +161,86 @@
                     alert("Ошибка при добавлении в корзину!");
                 }
             });
+            setTimeout(function(){ loadCart(); }, 500);
         }
+
+
+
+
+
+        function sendOrder() {
+            let contacts = prompt("Введите ваш номер телефона или Telegram: наш менеджер свяжется с вами для оплаты и согласования доставки");
+            if (!contacts) {
+                alert("Контакты обязательны!");
+                return;
+            }
+
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            fetch('/order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contacts: contacts, items: cart })
+            }).then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => alert("Ошибка при отправке заказа"));
+        }
+
+        const cartItems = document.getElementById('cart-items');
+    
+        // Функция загрузки корзины
+        function loadCart() {
+            fetch(`/cart?_=${Date.now()}`)
+                .then(response => response.json())
+                .then(data => {
+                    cartItems.innerHTML = ''; // Очистить старые элементы
+                    const buttonContainer = document.getElementById('order-button-container');
+                    buttonContainer.innerHTML = ''; // Убрать кнопку, если она уже есть
+
+                    if (data.length === 0) {
+                        cartItems.innerHTML = '<li class="collection-item">Пока пусто(</li>';
+                        return; 
+                    }
+
+                    data.forEach((item, index) => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <div class="row" style="display: flex; align-items: center;">
+                                <div style="flex: 0 0 auto; margin-right: 10px;">
+                                    <a onclick="removeFromCart(${index})">
+                                        <i class="material-icons" style="color: red; cursor: pointer;">close</i>
+                                    </a>
+                                </div>
+                                <div style="flex: 1;">
+                                    <p style="margin: 0;">
+                                        ${item.product.name} (${item.size || 'No size'}, ${item.color || 'No color'})
+                                    </p>
+                                </div>
+                            </div>`;
+                        cartItems.appendChild(li);
+                    });
+
+                    // Добавим кнопку "Заказать"
+                    const li2 = document.createElement('li');
+                    li2.innerHTML = `<div class="buy_button center-align" onClick="sendOrder()">заказать</div>`;
+                    cartItems.appendChild(li2);
+                });
+        }
+    
+        // Удалить из корзины
+        function removeFromCart(index) {
+            fetch(`/cart/${index}`, { method: 'DELETE' })
+                .then(response => {
+                    if (!response.ok) throw new Error('Ошибка удаления');
+                    return response.text(); // или .json(), если сервер возвращает данные
+                }).catch(err => console.error(err));
+            setTimeout(function(){ loadCart(); }, 500);
+        }
+    
+        // Загрузка корзины при загрузке страницы
+        document.addEventListener('DOMContentLoaded', loadCart);
     </script>
+
 </body>
 
 </html>

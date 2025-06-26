@@ -186,10 +186,15 @@
                     </div>
 
                     <!-- Кнопка добавления в корзину -->
-                    <div class="buy_button center-align" onclick="addToCart()">Добавить в корзину</div>
-                    <div class="buy_button center-align" onclick="location.href='/';" style="margin-top: 15px;" >вернуться</div>
+                    <div class="row">
+                        <div class="another_button center-align col s5">{{ product.price }}</div>
+                        <div class="col s2"></div>
+                        <div class="buy_button center-align col s5" onclick="addToCart()">в корзину</div>
+                    </div>
+                    <div class="row">
+                        <div class="buy_button center-align col s12" onclick="location.href='/';" style="margin-top: 15px;" >вернуться</div>
+                    </div>
 
-                    <p class="product_price">Цена: {{ product.price }}₽</p>
                     <p class="product_desc">{{ product.description }}</p>
 
                 </div>

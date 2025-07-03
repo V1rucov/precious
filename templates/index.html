@@ -25,6 +25,11 @@
         var elems = document.querySelectorAll('.modal');
         var instances = M.Modal.init(elems);
     });
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.pushpin');
+        var instances = M.Pushpin.init(elems);
+    });
 
     const cartItems = document.getElementById('cart-items');
 
@@ -108,22 +113,55 @@
         .then(data => alert(data.message))
         .catch(error => alert("Ошибка при отправке заказа"));
     }
+
+    $('.pushpin-nav').each(function() {
+        var $this = $(this);
+        var $target = $('#' + $(this).attr('data-target'));
+        $this.pushpin({
+            top: $target.offset().top,
+            bottom: $target.offset().top + $target.outerHeight() - $this.height()
+        });
+    });
 </script>
 
 <body style="background-color: #FFFFFF;">
 
-    <!-- видик интро
+    <!--pushpin-->
+    <div class="pushpin-nav row pinned" data-target="blue">
+        <div class="pushpin-text container">
+            <a href="/"><i class="material-icons">keyboard_backspace</i> </a>
+            
+        </div>
+    </div>
+
+    <div class="pushpin-wrapper"></div>
+
     <div id="video-overlay">
         <video id="intro-video" autoplay muted>
-            <source src="static/intro.mp4" type="video/mp4">
+            <source src="static/intro.mov" type="video/mp4">
             Ваш браузер не поддерживает видео.
         </video>
     </div>
-    -->
 
-    <header class="header">
-        <video src="/static/cinemalong_cut.mov" autoplay muted loop playsinline preload="yes"></video>
-    </header>
+    <div class="header">
+        <video src="/static/start.mov" id="hero-video" autoplay muted playsinline preload="auto"></video>
+    </div>
+
+    <script>
+        const video = document.getElementById("hero-video");
+        const video1 = "/static/start.mov";
+        const video2 = "/static/cicle.mov";
+
+        video.src = video1;
+        video.loop = false;
+        video.play();
+
+        video.addEventListener("ended", () => {
+            video.src = video2;
+            video.loop = true;
+            video.play();
+        });
+    </script>
 
     <div id="collection-block" class="main container" style="min-height: 100vh;">
         <div class="row">
@@ -170,8 +208,7 @@
         </div>
     </footer>
 
-    <!--
-    Видик в начале
+    
     <script>
         document.addEventListener('DOMContentLoaded', function () {
         const overlay = document.getElementById('video-overlay');
@@ -212,7 +249,5 @@
             };
         }
         });
-
-
-  </script> -->
+    </script>
 </body>

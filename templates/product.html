@@ -149,6 +149,16 @@
     </script>
 
     <body style="background-color: white;">
+
+        <!--pushpin-->
+        <div class="pushpin-nav row pinned" data-target="blue">
+            <div class="pushpin-text container">
+                <a href="/"><i class="material-icons">keyboard_backspace</i> </a>
+            </div>
+        </div>
+
+        <div class="pushpin-wrapper"></div>
+
         <div class="container" style="min-height: 100vh;">
             <h1 style="font-weight: bold; color: #8b0000;">{{ product.name }}</h1>
             <div class="row">
@@ -187,12 +197,11 @@
 
                     <!-- Кнопка добавления в корзину -->
                     <div class="row">
-                        <div class="another_button center-align col s5">{{ product.price }}</div>
-                        <div class="col s2"></div>
-                        <div class="buy_button center-align col s5" onclick="addToCart()">в корзину</div>
+                        
+                        <div class="buy_button center-align col s12" onclick="addToCart()">в корзину</div>
                     </div>
                     <div class="row">
-                        <div class="buy_button center-align col s12" onclick="location.href='/';" style="margin-top: 15px;" >вернуться</div>
+                        <div class="another_button center-align col s12">{{ product.price }}</div>
                     </div>
 
                     <p class="product_desc">{{ product.description }}</p>

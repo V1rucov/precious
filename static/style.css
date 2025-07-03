@@ -28,8 +28,20 @@
     }
 }
 
+.pushpin-nav {
+    background-color: snow; 
+    height: 25px; 
+    width: 100%; 
+    z-index: 1000; 
+}
 
+.pushpin-wrapper {
+    height: 25px;
+}
 
+.pushpin-text {
+    
+}
 
 .header {
     width: 100%;
@@ -47,6 +59,22 @@
     height: 100%;
 }
 
+.pushpin-text a {
+    text-decoration: none;
+    color: black;
+}
+
+.pushpin-text a:visited {
+    color: black;
+}
+
+.pushpin-text a:link {
+    color: black;
+}
+
+.pushpin-text a:active {
+    color: black;
+}
 
 
 

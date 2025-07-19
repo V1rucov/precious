@@ -210,43 +210,38 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-        const overlay = document.getElementById('video-overlay');
-        const video = document.getElementById('intro-video');
-        const skipBtn = document.getElementById('skip-btn');
+            const overlay = document.getElementById('video-overlay');
+            const video = document.getElementById('intro-video');
+            const skipBtn = document.getElementById('skip-btn');
 
-        // Проверка: уже видел ли пользователь видео
-        const hasSeen = localStorage.getItem('videoSeen');
+            const now = Date.now();
+            const sevenDays = 7 * 24 * 60 * 60 * 1000;
 
+            let seenData = null;
+            try {
+                seenData = JSON.parse(localStorage.getItem('videoSeen'));
+            } catch (e) {
+                seenData = null;
+            }
 
-        const seenData = JSON.parse(localStorage.getItem('videoSeen'));
-        const now = Date.now();
-        const sevenDays = 24 * 60 * 60 * 1000; 
+            const shouldShowVideo = !seenData || (now - seenData.timestamp > sevenDays);
 
-        if (!seenData || now - seenData.timestamp > sevenDays) {
-            document.getElementById('video-overlay').style.display = 'flex';
-            localStorage.setItem('videoSeen', JSON.stringify({
-                seen: true,
-                timestamp: now
-            }));
-        }
+            if (shouldShowVideo) {
+                overlay.style.display = 'flex';
+                video.play();
 
-        if (!hasSeen) {
-            overlay.style.display = 'flex';
-            video.play();
+                const markSeen = () => {
+                    overlay.style.display = 'none';
+                    localStorage.setItem('videoSeen', JSON.stringify({ timestamp: Date.now() }));
+                };
 
-            // После окончания видео — скрываем и ставим флаг
-            video.onended = () => {
-            overlay.style.display = 'none';
-            localStorage.setItem('videoSeen', 'true');
-            };
+                video.onended = markSeen;
 
-            // Кнопка "Пропустить"
-            skipBtn.onclick = () => {
-            video.pause();
-            overlay.style.display = 'none';
-            localStorage.setItem('videoSeen', 'true');
-            };
-        }
+                skipBtn.onclick = () => {
+                    video.pause();
+                    markSeen();
+                };
+            }
         });
     </script>
 </body>

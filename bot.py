@@ -43,4 +43,5 @@ async def send_order_notification(order_data, pdata, products):
         logging.error(f"Ошибка при отправке уведомления: {e}")
 
 async def main():
+    await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)

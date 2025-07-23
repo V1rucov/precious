@@ -16,11 +16,7 @@ logging.basicConfig(level=logging.INFO)
 
 @dp.message()
 async def catch_all(message: Message):
-    print("Пришло сообщение:", message.text)
-
-@dp.message(Command("start_admin"))
-async def start_handler(message: Message):
-    await message.answer(f"Привет! Я бот для уведомлений о заказах.\nТвой chat_id: {message.chat.id}")
+    print(f"Пришло сообщение {message.chat.id}:", message.text)
 
 async def send_order_notification(order_data, pdata, products):
     try:

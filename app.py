@@ -23,9 +23,12 @@ def load_product_data():
                 "colors": [],
                 "price": None,
             }
-            for file in os.listdir(folder_path):
-                if file.lower().endswith((".png", ".jpg", ".jpeg", ".gif")):
-                    product["images"].append(f"/products/{folder_name}/{file}")
+
+            product["images"] = [f"/products/{folder_name}/{file}" for file in sorted(
+                (f for f in os.listdir(folder_path) if f.lower().endswith((".png", ".jpg", ".jpeg", ".gif"))),
+                key=lambda x: int(''.join(filter(str.isdigit, x)) or 0)
+            )]
+
             desc_file = os.path.join(folder_path, "desc.txt")
             if os.path.exists(desc_file):
                 with open(desc_file, "r", encoding="utf-8") as f:

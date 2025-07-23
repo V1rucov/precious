@@ -173,6 +173,7 @@
                             <img class="product_image" src="{{ product.images[0] }}" alt="{{ product.name }}">
                         </a>
                         <p class="product_name">{{ product.name }}</p>
+                        <p class="product_name">{{ product.price }}</p>
                     </div>
                 </div>
             {% endfor %}
@@ -215,7 +216,7 @@
             const skipBtn = document.getElementById('skip-btn');
 
             const now = Date.now();
-            const sevenDays = 7 * 24 * 60 * 60 * 1000;
+            const sevenDays = 24 * 60 * 60 * 1000;
 
             let seenData = null;
             try {

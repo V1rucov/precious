@@ -4,7 +4,7 @@ from bot import send_order_notification
 import asyncio
 
 app = Flask(__name__)
-app.secret_key = "supersecretkey"  # Замените на собственный секретный ключ
+app.secret_key = "supersecretkey"
 PRODUCTS_DIR = "products"
 
 

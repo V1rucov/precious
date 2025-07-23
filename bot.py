@@ -14,7 +14,7 @@ dp = Dispatcher(bot=bot)
 
 logging.basicConfig(level=logging.INFO)
 
-@dp.message(Command("start"))
+@dp.message(Command("start_admin"))
 async def start_handler(message: Message):
     await message.answer(f"Привет! Я бот для уведомлений о заказах.\nТвой chat_id: {message.chat.id}")
 
